@@ -31,7 +31,9 @@
     </header>
 
     <main>
-        <!-- Hero section will go here -->
+        <div class = "hero-Image">
+            <img src="/FeeXRay/assets/images/hero.jpg" alt="Hero Image">
+        </div>
     </main>
 
 </body>

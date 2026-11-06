@@ -87,6 +87,14 @@ header {
 .signup-btn:hover {
     background-color: #047857;
 }
+.hero-Image {
+   
+    width: 50%;
+    height: auto;
+    display: block;
+    margin: auto;
+    border-radius: 8px;
+}
 
 /* Mobile layout */
 @media (max-width: 700px) {
@@ -105,4 +113,5 @@ header {
     .auth-buttons {
         margin-left: auto;
     }
+
 }
