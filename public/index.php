@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FeeXray | Home</title>
-    <link rel="stylesheet" href="/assets/css/home.css">
+    <link rel="stylesheet" href="/FeeXray/public/assets/css/home.css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
 
     <main>
         <div class = "hero-Image">
-            <img src="/assets/images/hero.jpg" alt="Hero Image">
+            <img src="/FeeXray/public/assets/images/hero.jpg" alt="Hero Image">
         </div>
     </main>
 
