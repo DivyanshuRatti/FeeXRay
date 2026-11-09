@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeeXray | Home</title>
+    <title>FeeXRay | Home</title>
     <link rel="stylesheet" href="/assets/css/home.css">
 </head>
 
@@ -19,22 +18,49 @@
 
             <div class="nav-links">
                 <a href="/">Home</a>
-                <a href="/contact">Contact</a>
+                <a href="/contact.php">Contact</a>
             </div>
 
             <div class="auth-buttons">
-                <a href="/login" class="login-btn">Login</a>
-                <a href="/register" class="signup-btn">Sign Up</a>
+                <a href="/login.php" class="login-btn">Login</a>
+                <a href="/signup.php" class="signup-btn">Sign Up</a>
             </div>
 
         </nav>
     </header>
 
     <main>
-        <div class = "hero-Image">
+        <!-- New: heading, text and button (like your reference photo) -->
+        <section>
+            <h1>See what your fees really cost you</h1>
+            <p>FeeXRay shows how much you pay in investment fees each year,
+               and how much they add up to over time.</p>
+            <a href="/signup.php">Get started</a>
+        </section>
+
+        <!-- Divyanshu's hero image (unchanged) -->
+        <div class="hero-Image">
             <img src="/assets/images/hero.jpg" alt="Hero Image">
         </div>
+
+        <!-- New: stat cards around the image -->
+        <aside>
+            <div>
+                <p>Yearly fees</p>
+                <p>$225</p>
+                <p>on $10,000 at 2.25% MER</p>
+            </div>
+            <div>
+                <p>Low-cost option</p>
+                <p>$20</p>
+                <p>on $10,000 at 0.20% MER</p>
+            </div>
+        </aside>
     </main>
+
+    <footer>
+        <p>FeeXRay is an educational tool, not financial advice.</p>
+    </footer>
 
 </body>
 </html>
