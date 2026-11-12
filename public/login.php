@@ -1,6 +1,6 @@
 <?php
 session_start();
-require __DIR__ . '/../src/databse.php';
+require __DIR__ . '/../src/database.php';
 
 $errors = [];
 $email = '';
@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $_SESSION['role'] = $user['role'];
 
         //Take the user to the dashboard
-        header('Location: /dashboard.php');
+        header('Location: /FeeXRay/public/dashboard.php');
         exit;
     }
 
