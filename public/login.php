@@ -1,6 +1,6 @@
 <?php
 session_start();
-require __DIR__ . '/../src/databse.php';
+require __DIR__ . '/../src/database.php';
 
 $errors = [];
 $email = '';
