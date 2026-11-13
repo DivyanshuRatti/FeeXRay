@@ -12,10 +12,10 @@
 
 <header class="site-header">
     <nav class="navbar">
-        <a href="/FeeXRay/public/index.php" class="logo">Fee<span>X</span>Ray</a>
+        <a href="/index.php" class="logo">Fee<span>X</span>Ray</a>
         <div class="nav-right">
             <span>Already have an account?</span>
-            <a href="/FeeXRay/views/login.php" class="login-btn">Log In</a>
+            <a href="/login.php" class="login-btn">Log In</a>
         </div>
     </nav>
 </header>

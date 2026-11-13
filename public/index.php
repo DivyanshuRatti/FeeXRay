@@ -2,7 +2,7 @@
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
-$accountUrl = $isLoggedIn ? '/FeeXRay/dashboard.php' : '/FeeXRay/views/auth/signup.php';
+$accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ $accountUrl = $isLoggedIn ? '/FeeXRay/dashboard.php' : '/FeeXRay/views/auth/sign
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FeeXRay helps investors understand investment fees and their long-term impact.">
     <title>FeeXRay | See Beyond Your Investment Fees</title>
-    <link rel="stylesheet" href="/FeeXRay/public/assets/css/home.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
 </head>
 <body>
 
@@ -28,10 +28,10 @@ $accountUrl = $isLoggedIn ? '/FeeXRay/dashboard.php' : '/FeeXRay/views/auth/sign
 
         <div class="auth-buttons">
             <?php if ($isLoggedIn): ?>
-                <a href="/FeeXRay/dashboard.php" class="signup-btn">Dashboard</a>
+                <a href="/dashboard.php" class="signup-btn">Dashboard</a>
             <?php else: ?>
-                <a href="/FeeXRay/views/login.php" class="login-btn">Login</a>
-                <a href="/FeeXRay/views/auth/signup.php" class="signup-btn">Get Started</a>
+                <a href="/login.php" class="login-btn">Login</a>
+                <a href="/signup.php" class="signup-btn">Get Started</a>
             <?php endif; ?>
         </div>
     </nav>
