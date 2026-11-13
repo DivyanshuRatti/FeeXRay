@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Create your FeeXRay account and start understanding your investment fees.">
     <title>Create Account | FeeXRay</title>
-    <link rel="stylesheet" href="/FeeXRay/public/assets/css/signup.css">
+    <link rel="stylesheet" href="/assets/css/signup.css">
 </head>
 <body>
 

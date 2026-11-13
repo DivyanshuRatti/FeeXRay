@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Log in to FeeXRay and manage your investment portfolio.">
     <title>Login | FeeXRay</title>
-    <link rel="stylesheet" href="/FeeXRay/public/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
 </head>
 <body>
 
 <header class="site-header">
     <nav class="navbar">
-        <a href="/FeeXRay/public/index.php" class="logo">Fee<span>X</span>Ray</a>
+        <a href="/index.php" class="logo">Fee<span>X</span>Ray</a>
 
         <div class="nav-right">
             <span>New to FeeXRay?</span>
-            <a href="/FeeXRay/public/signup.php" class="signup-link">Get Started</a>
+            <a href="/signup.php" class="signup-link">Get Started</a>
         </div>
     </nav>
 </header>
@@ -88,7 +88,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="/FeeXRay/public/login.php">
+            <form method="POST" action="/login.php">
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
@@ -123,7 +123,7 @@
 
             <p class="signup-text">
                 Don't have an account?
-                <a href="/FeeXRay/public/signup.php">Create an account</a>
+                <a href="/signup.php">Create an account</a>
             </p>
 
             <p class="disclaimer">

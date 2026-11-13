@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $_SESSION['role'] = $user['role'];
 
         //Take the user to the dashboard
-        header('Location: /FeeXRay/public/dashboard.php');
+        header('Location:/dashboard.php');
         exit;
     }
 
