@@ -1,7 +1,8 @@
+
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
-$accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
+$accountUrl = $isLoggedIn ? '/FeeXRay/dashboard.php' : '/FeeXRay/views/auth/signup.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,13 +12,13 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FeeXRay helps investors understand investment fees and their long-term impact.">
     <title>FeeXRay | See Beyond Your Investment Fees</title>
-    <link rel="stylesheet" href="/assets/css/home.css">
+    <link rel="stylesheet" href="/FeeXRay/public/assets/css/home.css">
 </head>
 <body>
 
 <header class="site-header">
     <nav class="navbar" aria-label="Main navigation">
-        <a href="/" class="logo">Fee<span>X</span>Ray</a>
+        <a href="/FeeXRay/" class="logo">Fee<span>X</span>Ray</a>
 
         <div class="nav-links">
             <a href="#features">Features</a>
@@ -27,10 +28,10 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
 
         <div class="auth-buttons">
             <?php if ($isLoggedIn): ?>
-                <a href="/dashboard.php" class="signup-btn">Dashboard</a>
+                <a href="/FeeXRay/dashboard.php" class="signup-btn">Dashboard</a>
             <?php else: ?>
-                <a href="/login.php" class="login-btn">Login</a>
-                <a href="/signup.php" class="signup-btn">Get Started</a>
+                <a href="/FeeXRay/views/login.php" class="login-btn">Login</a>
+                <a href="/FeeXRay/views/auth/signup.php" class="signup-btn">Get Started</a>
             <?php endif; ?>
         </div>
     </nav>
@@ -136,7 +137,7 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
         <div class="account-types">
             <span>TFSA</span>
             <span>RRSP</span>
-            <span>Pension</span>
+            <span>RESP</span>
             <span>Non-Registered</span>
         </div>
     </section>
@@ -295,7 +296,7 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
 <footer class="footer">
     <div class="footer-main">
         <div class="footer-brand">
-            <a href="/" class="logo">Fee<span>X</span>Ray</a>
+            <a href="/FeeXRay/public/index.php" class="logo">Fee<span>X</span>Ray</a>
             <p>Helping investors understand the true cost of investing.</p>
         </div>
 
@@ -303,7 +304,7 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#about">About</a>
-            <a href="/login.php">Login</a>
+            <a href="/FeeXRay/login.php">Login</a>
         </div>
     </div>
 

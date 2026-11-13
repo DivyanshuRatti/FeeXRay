@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$name,$email,$hash]);
 
         //Go to the login page after successful entry into db
-        header('Location: /login.php?registered=1');
+        header('Location: /FeeXRay/views/login.php?registered=1');
         exit;
        }
     }
