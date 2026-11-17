@@ -12,7 +12,6 @@
         <nav>
             <a href="/dashboard.php">Dashboard</a>
             <a href="/portfolios.php">Portfolios</a>
-            <a href="/holding-add.php">Add holding</a>
         </nav>
         <a href="/logout.php">Log out</a>
     </aside>
@@ -29,7 +28,7 @@
 
         <section>
             <h2>Holdings</h2>
-            <p>No holdings yet. Holdings come in the next feature.</p>
+            <a href="/holding-add.php?portfolio_id=<?php echo $portfolio['id']; ?>">Add holding</a>
         </section>
     </main>
 
