@@ -12,7 +12,6 @@
         <nav>
             <a href="/dashboard.php">Dashboard</a>
             <a href="/portfolios.php">Portfolios</a>
-            <a href="/holding-add.php">Add holding</a>
         </nav>
         <a href="/logout.php">Log out</a>
     </aside>
