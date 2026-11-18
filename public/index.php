@@ -18,7 +18,8 @@ $accountUrl = $isLoggedIn ? '/dashboard.php' : '/signup.php';
 
 <header class="site-header">
     <nav class="navbar" aria-label="Main navigation">
-        <a href="/FeeXRay/" class="logo">Fee<span>X</span>Ray</a>
+        <a href="/FeeXRay/" class="logo">
+            <img src="/assets/images/FeeXRay Logo with Gold Coin.png" alt="FeeXRay Logo">
 
         <div class="nav-links">
             <a href="#features">Features</a>

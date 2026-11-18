@@ -35,6 +35,18 @@ a {
     background: var(--white);
     border-bottom: 1px solid var(--soft-border);
 }
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo img {
+    width: auto;
+    height: 45px;
+    object-fit: contain;
+    display: block;
+}
 
 .navbar {
     width: 100%;
