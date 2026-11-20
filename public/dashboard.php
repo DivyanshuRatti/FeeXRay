@@ -1,22 +1,31 @@
 <?php
 
 require __DIR__ . '/../src/auth.php';
+require_once __DIR__ . '/../src/Database.php';
 requireLogin();
 
-// ---- PLACEHOLDER DATA ----
-// Fake numbers for designing the page.
-// Later these come from the database and the fee calculator.
-$summary = [
-    'total_invested' => 25000,
-    'yearly_fees'    => 480,
-    'average_mer'    => 0.0192,
-];
+$stmt = getConnection()->prepare(
+    'SELECT p.account_type, h.amount, h.fund_id,
+            COALESCE(f.name, h.custom_name) AS holding_name,
+            COALESCE(f.mer, h.custom_mer) AS mer
+     FROM portfolios p
+     JOIN holdings h ON h.portfolio_id = p.id
+     LEFT JOIN funds f ON f.id = h.fund_id
+     WHERE p.user_id = ?
+     ORDER BY h.id'
+);
+$stmt->execute([$_SESSION['user_id']]);
+$holdings = [];
 
-$portfolios = [
-    ['id' => 1, 'name' => 'My TFSA',   'account_type' => 'TFSA', 'value' => 15000, 'yearly_fee' => 300],
-    ['id' => 2, 'name' => 'Work RRSP', 'account_type' => 'RRSP', 'value' => 10000, 'yearly_fee' => 180],
-];
-// ---- END PLACEHOLDER ----
+foreach ($stmt as $row) {
+    $holdings[] = [
+        'account' => $row['account_type'],
+        'fundId' => $row['fund_id'] === null ? null : (int) $row['fund_id'],
+        'name' => $row['holding_name'],
+        'amount' => (float) $row['amount'],
+        'mer' => (float) $row['mer'],
+    ];
+}
 
 require __DIR__ . '/../views/dashboard.php';
 
