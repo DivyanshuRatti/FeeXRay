@@ -1,11 +1,11 @@
 <?php
-require __DIR__ .'/../src/database.php';
+require __DIR__ .'/../src/Database.php';
 require __DIR__ .'/../src/auth.php';
 requireLogin();
 
 $name='';
 $errors=[];
-$allowedTypes=['TFSA','RRSP','PENSION','NON_REG'];
+$allowedTypes=['TFSA','RRSP','RESP','PENSION','NON_REG'];
 if($_SERVER['REQUEST_METHOD']==='POST'){
     $name=trim($_POST['name']?? '');
     $accountType=$_POST['account_type'] ?? '';

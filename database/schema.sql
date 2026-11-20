@@ -25,7 +25,7 @@ CREATE TABLE portfolios(
     id              INT PRIMARY KEY AUTO_INCREMENT,
     user_id         INT NOT NULL, 
     name            VARCHAR(100) NOT NULL,
-    account_type    ENUM('RRSP','TFSA','PENSION','NON_REG') NOT NULL,
+    account_type    ENUM('RRSP','TFSA','PENSION','NON_REG','RESP') NOT NULL,
     created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

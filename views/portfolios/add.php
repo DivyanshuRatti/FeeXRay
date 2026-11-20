@@ -29,6 +29,7 @@
                 <option value="">Choose one</option>
                 <option value="TFSA">TFSA</option>
                 <option value="RRSP">RRSP</option>
+                <option value="RESP">RESP</option>
                 <option value="PENSION">Pension</option>
                 <option value="NON_REG">Non-registered</option>
             </select>
