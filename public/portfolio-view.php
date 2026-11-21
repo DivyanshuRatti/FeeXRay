@@ -19,4 +19,43 @@ if (!$portfolio) {
     exit;
 }
 
+
+//Get this portfolio's holdings.
+//LEFT JOIN keeps custom holdings which have no matching fund.
+$stmt=$pdo->prepare('
+SELECT h.id, h.amount, h.custom_name, h.custom_mer, f.name AS fund_name, f.mer as fund_mer
+FROM holdings h
+LEFT JOIN funds f on h.fund_id=f.id
+WHERE h.portfolio_id = ?
+ORDER BY h.id');
+
+$stmt->execute([$portfolio['id']]);
+$rows=$stmt->fetchAll();
+
+$holdings = [];
+$totalAmount = 0;
+$totalFee= 0;
+
+foreach($rows as $row){
+    //Listed fund: use the fund's name and MER. Custom: use the custom ones.
+    $name=$row['fund_name']??$row['custom_name'];
+    $mer = $row['fund_mer']?? $row['custom_mer'];
+
+    $yearlyFee= $row['amount'] * $mer; //e.g 10000*0.0225=225
+
+    $holdings[] = [
+        'id' => $row['id'],
+        'name' => $name,
+        'is_custom' => $row['fund_name'] ===null,
+        'amount' => $row['amount'],
+        'mer' => $mer,
+        'yearly_fee' => $yearlyFee,
+    ];
+
+    $totalAmount += $row['amount'];
+    $totalFee += $yearlyFee;
+}
+
+// Average MER, weighted by how much is in each fund
+$averageMer = $totalAmount > 0 ? $totalFee / $totalAmount : 0;
 require __DIR__ . '/../views/portfolios/show.php';
