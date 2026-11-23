@@ -1,6 +1,7 @@
 <?php
 require __DIR__ .'/../src/Database.php';
 require __DIR__ .'/../src/auth.php';
+require __DIR__ .'/../src/csrf.php';
 requireLogin();
 
 $pdo=getConnection();
@@ -25,10 +26,13 @@ $fundsIds=array_column($funds,'id');
 $errors = [];
 $choice = '';
 $customName = '';
+$customMer = '';
 $amount = '';
 
 //Runs only when the save button is clicked
 if($_SERVER['REQUEST_METHOD']==='POST'){
+    verifyCsrf();
+
     $choice = $_POST['fund_id'] ?? '';
     $customName = trim($_POST['custom_name'] ?? '');
     $customMer = trim($_POST['custom_mer'] ?? '');

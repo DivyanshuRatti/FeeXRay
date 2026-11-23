@@ -23,6 +23,7 @@
 
         <!-- The portfolio id in the URL tells the logic file where to save the holding -->
         <form method="POST" action="/holding-add.php?portfolio_id=<?php echo $portfolio['id']; ?>">
+            <?php csrfField(); ?>
             <label for="fund_id">Fund</label>
             <select id="fund_id" name="fund_id" required>
                 <option value="">Choose a fund</option>

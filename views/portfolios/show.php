@@ -23,6 +23,7 @@
         <p><?php echo htmlspecialchars($portfolio['account_type']); ?></p>
 
         <form method="POST" action="/portfolio-delete.php" onsubmit="return confirm('Delete this portfolio and all its holdings?');">
+            <?php csrfField(); ?>
             <input type="hidden" name="id" value="<?php echo $portfolio['id']; ?>">
             <button type="submit">Delete portfolio</button>
         </form>
@@ -58,7 +59,9 @@
                     $fee = number_format($h['yearly_fee'], 2);
 
                     $id = $h['id'];
+                    $token = csrfToken();
                     $deleteForm = "<form method='POST' action='/holding-delete.php' onsubmit=\"return confirm('Delete this holding?');\">"
+                                . "<input type='hidden' name='csrf_token' value='$token'>"
                                 . "<input type='hidden' name='id' value='$id'>"
                                 . "<button type='submit'>Delete</button>"
                                 . "</form>";

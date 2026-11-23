@@ -1,12 +1,15 @@
 <?php
 require __DIR__ .'/../src/Database.php';
 require __DIR__ .'/../src/auth.php';
+require __DIR__ .'/../src/csrf.php';
 requireLogin();
 
 $name='';
 $errors=[];
 $allowedTypes=['TFSA','RRSP','RESP','PENSION','NON_REG'];
 if($_SERVER['REQUEST_METHOD']==='POST'){
+    verifyCsrf();
+
     $name=trim($_POST['name']?? '');
     $accountType=$_POST['account_type'] ?? '';
 

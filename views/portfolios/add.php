@@ -21,6 +21,7 @@
         ?>
 
         <form method="POST" action="/portfolio-add.php">
+            <?php csrfField(); ?>
             <label for="name">Portfolio name</label>
             <input type="text" id="name" name="name" placeholder="My TFSA" value="<?php echo htmlspecialchars($name); ?>" required>
 
