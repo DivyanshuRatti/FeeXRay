@@ -17,7 +17,7 @@ CREATE TABLE funds(
     fund_code       VARCHAR(20) NOT NULL UNIQUE,
     provider        VARCHAR(100) NOT NULL, 
     asset_class     VARCHAR(50),
-    mer             DECIMAL(5,4) NOT NULL CHECK (mer >= 0 AND mer < 0.05),
+    mer             DECIMAL(5,4) NOT NULL CHECK (mer >= 0 AND mer <= 0.05),
     mer_as_of       DATE NOT NULL 
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE holdings(
     portfolio_id    INT NOT NULL,
     fund_id         INT,
     custom_name     VARCHAR(150),
-    custom_mer      DECIMAL(5,4) CHECK (custom_mer >= 0 AND custom_mer < 0.05),
+    custom_mer      DECIMAL(5,4) CHECK (custom_mer >= 0 AND custom_mer <= 0.05),
     amount          DECIMAL (12,2) NOT NULL CHECK(amount>0),
     FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE,
     FOREIGN KEY (fund_id) REFERENCES funds(id),
