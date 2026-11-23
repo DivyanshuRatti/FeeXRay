@@ -46,7 +46,7 @@
 
                 // One row per holding
                 echo '<table>';
-                echo '<tr><th>Fund</th><th>Amount</th><th>MER</th><th>Yearly fee</th></tr>';
+                echo '<tr><th>Fund</th><th>Amount</th><th>MER</th><th>Yearly fee</th><th></th></tr>';
 
                 foreach ($holdings as $h) {
                     $name = htmlspecialchars($h['name']);
@@ -57,9 +57,15 @@
                     $mer = number_format($h['mer'] * 100, 2);
                     $fee = number_format($h['yearly_fee'], 2);
 
-                    echo "<tr><td>$name</td><td>$$amount</td><td>$mer%</td><td>$$fee</td></tr>";
-                }
+                    $id = $h['id'];
+                    $deleteForm = "<form method='POST' action='/holding-delete.php' onsubmit=\"return confirm('Delete this holding?');\">"
+                                . "<input type='hidden' name='id' value='$id'>"
+                                . "<button type='submit'>Delete</button>"
+                                . "</form>";
 
+                    echo "<tr><td>$name</td><td>$$amount</td><td>$mer%</td><td>$$fee</td><td>$deleteForm</td></tr>";
+                                    
+                }
                 echo '</table>';
             }
             ?>

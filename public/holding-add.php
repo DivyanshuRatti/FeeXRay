@@ -1,5 +1,5 @@
 <?php
-require __DIR__ .'/../src/database.php';
+require __DIR__ .'/../src/Database.php';
 require __DIR__ .'/../src/auth.php';
 requireLogin();
 
@@ -53,8 +53,8 @@ if($choice === 'custom'){
         $errors[] = 'Fund name must be 150 characters or less.';
     }
 
-    if(!is_numeric($customMer) || $customMer<0 || $customMer >=10){
-        $errors[] = 'Please enter an MER between 0 and 10 (for example 2.25).';
+    if(!is_numeric($customMer) || $customMer<0 || $customMer >5){
+        $errors[] = 'Please enter an MER between 0 and 5 (for example 2.25).';
     }
 
     
