@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/Database.php';
 require __DIR__ . '/../src/auth.php';
 requireLogin();
 

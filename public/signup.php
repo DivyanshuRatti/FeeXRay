@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/Database.php';
 
 $errors = [];
 $name = '';
