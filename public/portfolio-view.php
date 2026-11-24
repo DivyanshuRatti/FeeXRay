@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../src/Database.php';
 require __DIR__ . '/../src/auth.php';
+require __DIR__ . '/../src/csrf.php';
 requireLogin();
 
 // Which portfolio? Read the id from the URL
