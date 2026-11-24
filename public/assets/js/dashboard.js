@@ -46,6 +46,54 @@
         return cumulativeFees;
     }
 
+    // "Lower-cost options": funds that have a cheaper fund in the same category
+    function renderSavings(years) {
+        const byFund = new Map();
+        for (const row of selectedHoldings) {
+            if (!row.alternative) continue;
+            const item = byFund.get(row.fundId) ?? { name: row.name, mer: row.mer, alternative: row.alternative, amount: 0 };
+            item.amount += row.amount;
+            byFund.set(row.fundId, item);
+        }
+
+        const items = [...byFund.values()].map((item) => {
+            const current = projectFees([{ amount: item.amount, mer: item.mer }], years)[years];
+            const cheaper = projectFees([{ amount: item.amount, mer: item.alternative.mer }], years)[years];
+            return { ...item, current, cheaper, saving: current - cheaper };
+        }).sort((a, b) => b.saving - a.saving);
+
+        const yearLabel = years + (years === 1 ? ' year' : ' years');
+        const totalSaving = items.reduce((sum, item) => sum + item.saving, 0);
+
+        get('savings-period').textContent = 'Estimated fees over ' + yearLabel;
+        get('savings-list').replaceChildren(...items.map(savingCard));
+        get('savings-total').textContent = items.length ? 'Possible saving in total: ' + money(totalSaving) + ' over ' + yearLabel : '';
+        get('savings-empty').hidden = items.length > 0;
+        get('savings-empty').textContent = selectedHoldings.length
+            ? 'Your funds are already the lowest-cost ones in their categories on our list.'
+            : 'Add holdings to see lower-cost options.';
+    }
+
+    // One card: current fund, cheaper fund, and the saving
+    function savingCard(item) {
+        const card = document.createElement('li');
+        card.className = 'saving-card';
+        const lines = [
+            ['saving-fund', item.name + ' · ' + percent.format(item.mer) + ' MER'],
+            ['saving-fees', 'Fees: ' + money(item.current)],
+            ['saving-alt', 'Same category: ' + item.alternative.name + ' (' + item.alternative.code + ') · ' + percent.format(item.alternative.mer) + ' MER'],
+            ['saving-fees', 'Fees: ' + money(item.cheaper)],
+            ['saving-amount', 'Possible saving: ' + money(item.saving)]
+        ];
+        for (const [className, text] of lines) {
+            const line = document.createElement('p');
+            line.className = className;
+            line.textContent = text;
+            card.append(line);
+        }
+        return card;
+    }
+
     function chartColors() {
         const styles = getComputedStyle(document.documentElement);
         return Object.fromEntries(['muted', 'grid', 'line', 'line-fill'].map((token) => [
@@ -90,6 +138,7 @@
         yearSlider.setAttribute('aria-valuetext', yearLabel);
         const fees = projectFees(selectedHoldings, years);
         get('projected-cost').textContent = money(fees[years]);
+        renderSavings(years);
         if (!feeChart) return;
         feeChart.data.labels = fees.map((_, year) => year);
         feeChart.data.datasets[0].data = selectedHoldings.length ? fees : [];
