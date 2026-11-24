@@ -89,6 +89,7 @@
             <?php endif; ?>
 
             <form method="POST" action="/login.php">
+                <?php csrfField(); ?>
 
                 <div class="form-group">
                     <label for="email">Email Address</label>

@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/Database.php';
+require __DIR__ . '/../src/csrf.php';
 
 $errors = [];
 $name = '';
@@ -7,6 +8,7 @@ $email = '';
 
 // Runs only when the Sign Up button is clicked
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verifyCsrf();
 
     // Read what the user typed
     $name = trim($_POST['name'] ?? '');

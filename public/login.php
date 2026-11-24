@@ -1,12 +1,15 @@
 <?php
 session_start();
-require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/Database.php';
+require __DIR__ . '/../src/csrf.php';
 
 $errors = [];
 $email = '';
 
 //Runs only when the login button is clicked
 if($_SERVER['REQUEST_METHOD']==='POST'){
+    verifyCsrf();
+
     //read user input
     $email = strtolower(trim($_POST['email'] ?? ''));
     $password = $_POST['password'] ?? '';

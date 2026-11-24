@@ -81,6 +81,7 @@
             <?php endif; ?>
 
             <form action="/signup.php" method="POST">
+                <?php csrfField(); ?>
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input

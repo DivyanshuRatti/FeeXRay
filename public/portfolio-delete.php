@@ -1,6 +1,7 @@
 <?php
-require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/Database.php';
 require __DIR__ . '/../src/auth.php';
+require __DIR__ . '/../src/csrf.php';
 requireLogin();
 
 // Only allow form submissions
@@ -8,6 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /portfolios.php');
     exit;
 }
+
+// Block forms that didn't come from a FeeXRay page
+verifyCsrf();
 
 $id = (int) ($_POST['id'] ?? 0);
 

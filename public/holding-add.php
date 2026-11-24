@@ -1,6 +1,7 @@
 <?php
-require __DIR__ .'/../src/database.php';
+require __DIR__ .'/../src/Database.php';
 require __DIR__ .'/../src/auth.php';
+require __DIR__ .'/../src/csrf.php';
 requireLogin();
 
 $pdo=getConnection();
@@ -25,10 +26,13 @@ $fundsIds=array_column($funds,'id');
 $errors = [];
 $choice = '';
 $customName = '';
+$customMer = '';
 $amount = '';
 
 //Runs only when the save button is clicked
 if($_SERVER['REQUEST_METHOD']==='POST'){
+    verifyCsrf();
+
     $choice = $_POST['fund_id'] ?? '';
     $customName = trim($_POST['custom_name'] ?? '');
     $customMer = trim($_POST['custom_mer'] ?? '');
@@ -53,8 +57,8 @@ if($choice === 'custom'){
         $errors[] = 'Fund name must be 150 characters or less.';
     }
 
-    if(!is_numeric($customMer) || $customMer<0 || $customMer >=10){
-        $errors[] = 'Please enter an MER between 0 and 10 (for example 2.25).';
+    if(!is_numeric($customMer) || $customMer<0 || $customMer >5){
+        $errors[] = 'Please enter an MER between 0 and 5 (for example 2.25).';
     }
 
     
