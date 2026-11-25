@@ -184,6 +184,18 @@ $percent = $totalInvested > 0 ? number_format(100 * $totalFees / $totalInvested,
                 <p class="assumptions">Assumes a 5% annual return before fees, constant MERs, and no deposits or withdrawals. Each year’s fee is estimated from the opening balance.</p>
             </section>
         </div>
+        <section class="panel glass savings" aria-labelledby="savings-title">
+            <div class="panel-heading">
+                <div>
+                    <h2 id="savings-title">Lower-cost options</h2>
+                    <p id="savings-period">Estimated fees over 20 years</p>
+                </div>
+            </div>
+            <ul id="savings-list" class="savings-list"></ul>
+            <p id="savings-total" class="savings-total"></p>
+            <p id="savings-empty" class="holdings-empty" hidden></p>
+            <p class="assumptions">Compares each fund with the lowest-cost fund in the same category on our list. Funds in the same category can still differ in holdings, risk and strategy. Estimate only, not financial advice.</p>
+        </section>
         <noscript><p class="glass noscript">Enable JavaScript to view charts, holdings, and projections.</p></noscript>
     </main>
 
