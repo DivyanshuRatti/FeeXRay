@@ -1,0 +1,103 @@
+.logout-page {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 24px;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 18% 70%, var(--wash), transparent 52%),
+        radial-gradient(ellipse at 89% 15%, var(--wash), transparent 48%),
+        var(--canvas);
+}
+
+/* The static coins stay visible if WebGL or animation is unavailable. */
+.logout-scene {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+.logout-scene::before {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, transparent 15%, #000 80%);
+    opacity: .64;
+    content: '';
+}
+.logout-scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.logout-coin {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: clamp(80px, 16vmin, 158px);
+    aspect-ratio: 1;
+    border: 5px double #ad7926;
+    border-radius: 50%;
+    color: #80510c;
+    background: linear-gradient(145deg, #ffefa6 10%, #f3c55e 55%, #bd822e 100%);
+    box-shadow: 0 8px 0 #a37330, 0 13px 35px #6f522a40, inset 0 0 0 5px #ffdf8c;
+    font-size: clamp(2.5rem, 9vmin, 5rem);
+    font-weight: 750;
+    opacity: .76;
+}
+.logout-coin-left { left: 10%; top: 55%; transform: rotate(-24deg) scaleX(.82); }
+.logout-coin-right { right: 10%; top: 19%; transform: rotate(17deg) scaleX(.9); }
+.logout-coin-small { right: 18%; bottom: 12%; transform: rotate(-16deg) scale(.55); }
+.logout-scene.is-animated .logout-coin { visibility: hidden; }
+
+.logout-card {
+    width: min(100%, 520px);
+    padding: clamp(28px, 6vw, 48px) clamp(18px, 5vw, 42px);
+    border-radius: 27px;
+    background: linear-gradient(145deg, var(--rim), transparent 48%), var(--glass);
+    text-align: center;
+    animation: logout-card-in 280ms ease-out;
+}
+.logout-brand { padding: 0; margin: 0 auto 25px; }
+.logout-card h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.05rem); }
+.logout-message { margin: 12px auto 17px; color: var(--muted); }
+.logout-message strong { color: var(--green); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.logout-progress {
+    display: block;
+    width: min(100%, 230px);
+    height: 5px;
+    margin: 0 auto 24px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 8px;
+    color: var(--accent);
+    background: var(--selected);
+}
+.logout-progress::-webkit-progress-bar { background: var(--selected); }
+.logout-progress::-webkit-progress-value { background: var(--accent); }
+.logout-progress::-moz-progress-bar { background: var(--accent); }
+.logout-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    transition: background-color 140ms ease, transform 140ms ease;
+}
+.logout-home:hover { transform: translateY(-2px); }
+.logout-home:active { transform: none; }
+
+@keyframes logout-card-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+@media (max-width: 620px) {
+    .logout-coin-left { left: 7%; top: 15%; }
+    .logout-coin-right { right: 9%; top: auto; bottom: 12%; }
+    .logout-coin-small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .logout-card { animation: none; }
+    .logout-home { transition: none; }
+    .logout-home:hover { transform: none; }
+}
