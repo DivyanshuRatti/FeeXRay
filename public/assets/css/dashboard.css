@@ -13,8 +13,6 @@
     --shadow: 0 12px 36px rgb(21 57 48 / 7%);
     --selected: #e3f6ee;
     --grid: rgb(49 91 81 / 14%);
-    --line: #06856c;
-    --line-fill: rgb(16 168 132 / 25%);
     --blue: #2a608d;
     --violet: #654b9e;
 }
@@ -34,8 +32,6 @@
     --shadow: 0 12px 38px rgb(0 0 0 / 19%);
     --selected: #1c3d3c;
     --grid: rgb(171 217 206 / 16%);
-    --line: #61e1bb;
-    --line-fill: rgb(79 225 182 / 24%);
     --blue: #a2d0fa;
     --violet: #cebaff;
 }
@@ -202,13 +198,40 @@ h1 { font-size: clamp(1.85rem, 3.3vw, 2.7rem); line-height: 1.13; margin-top: 5p
 .account-fee b { color: var(--green); font-weight: 700; }
 
 .analytics { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; align-items: start; }
+.savings { grid-column: 1 / -1; }
 .panel { min-width: 0; border-radius: 19px; padding: 17px 19px; height: 100%; }
 .panel-heading { align-items: flex-start; margin-bottom: 13px; }
 .panel-heading p { margin-top: 3px; font-size: .875rem; color: var(--muted); }
-.line-key { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: .8125rem; color: var(--muted); }
-.line-key i { display: inline-block; width: 13px; height: 3px; border-radius: 5px; background: var(--line); }
 .chart-frame { position: relative; min-width: 0; }
 .line-frame { height: 228px; }
+.trend .panel-heading { flex-wrap: wrap; }
+.fee-control { flex: 0 1 15rem; min-width: 0; }
+.fee-control select { width: 100%; min-width: 0; }
+/* Scroll the fund list when there are too many holdings for one screen. */
+.fee-legend {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 3px 10px;
+    max-height: 9rem;
+    border: 1px solid var(--edge);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: auto;
+}
+.fee-legend:empty { display: none; }
+.fee-legend li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 9px;
+    padding: 6px 8px 6px 0;
+    font-size: .875rem;
+}
+.fee-legend li + li { border-top: 1px solid var(--edge); }
+.fee-line-swatch { width: 24px; height: 5px; margin-top: 8px; border-radius: 5px; }
+.fee-legend span { overflow-wrap: anywhere; }
+.fee-legend small { display: block; color: var(--muted); font-size: .8125rem; }
+.fee-legend strong { text-align: right; font-variant-numeric: tabular-nums; }
 .donut-frame { width: min(100%, 188px); height: 160px; margin: 0 auto; }
 .donut-center { position: absolute; inset: 0 18%; display: flex; flex-direction: column; justify-content: center; text-align: center; pointer-events: none; }
 .donut-center small { color: var(--muted); font-size: .72rem; }
@@ -274,5 +297,4 @@ input[type="range"] { display: block; width: 100%; margin: 8px 0 4px; cursor: po
     .account-grid { grid-template-columns: minmax(0, 1fr); }
     .account-card { padding: 12px; }
     .account-fee b { display: inline; }
-    .line-key { display: none; }
 }

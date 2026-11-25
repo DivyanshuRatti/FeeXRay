@@ -5,6 +5,7 @@
     const holdings = JSON.parse(get('dashboard-data').textContent);
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     const accountSelect = get('account-select');
+    const feeHoldingSelect = get('fee-holding-select');
     const yearSlider = get('horizon-years');
     const accountCards = document.querySelectorAll('[data-account]');
     const currency = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' });
@@ -16,6 +17,7 @@
     const allocationColors = ['#0c9c79', '#5b75ce', '#a06ac2', '#d77e45', '#cb5c79', '#289db8', '#a09a3f', '#547684'];
     const grossReturn = 0.05;
     let selectedHoldings = [];
+    let selectedFunds = [];
     let feeChart;
     let allocationChart;
 
@@ -23,9 +25,11 @@
         const grouped = new Map();
         for (const row of rows) {
             const key = row.fundId === null ? 'custom:' + row.name.trim().toLowerCase() : 'fund:' + row.fundId;
-            const holding = grouped.get(key) ?? { name: row.name, amount: 0, annualFee: 0 };
+            const holding = grouped.get(key) ?? { name: row.name, amount: 0, annualFee: 0, rows: [] };
             holding.amount += row.amount;
             holding.annualFee += row.amount * row.mer;
+            // Keep the original MER for each position when projecting a fund's fees.
+            holding.rows.push(row);
             grouped.set(key, holding);
         }
         return [...grouped.values()].sort((a, b) => b.amount - a.amount || a.name.localeCompare(b.name));
@@ -96,7 +100,7 @@
 
     function chartColors() {
         const styles = getComputedStyle(document.documentElement);
-        return Object.fromEntries(['muted', 'grid', 'line', 'line-fill'].map((token) => [
+        return Object.fromEntries(['muted', 'grid'].map((token) => [
             token, styles.getPropertyValue('--' + token).trim()
         ]));
     }
@@ -121,9 +125,6 @@
         x.ticks.color = colors.muted;
         y.ticks.color = colors.muted;
         y.grid.color = colors.grid;
-        const line = feeChart.data.datasets[0];
-        line.borderColor = colors.line;
-        line.pointBackgroundColor = colors.line;
         feeChart.update('none');
         if (selectedHoldings.length === 0) {
             allocationChart.data.datasets[0].backgroundColor = [colors.grid];
@@ -139,17 +140,85 @@
         const fees = projectFees(selectedHoldings, years);
         get('projected-cost').textContent = money(fees[years]);
         renderSavings(years);
+        renderFeeChart();
+    }
+
+    function renderFeeChart() {
+        const years = Number(yearSlider.value);
+        const yearLabel = get('year-label').textContent;
+        const selectedIndex = feeHoldingSelect.value;
+        const legend = document.createDocumentFragment();
+        const datasets = [];
+
+        // Keep the same colour when the dropdown narrows the chart to one holding.
+        selectedFunds.forEach((fund, index) => {
+            if (selectedIndex !== 'all' && selectedIndex !== String(index)) return;
+            const color = holdingColor(index);
+            const fees = projectFees(fund.rows, years);
+            const item = document.createElement('li');
+            const swatch = document.createElement('span');
+            swatch.className = 'fee-line-swatch';
+            swatch.style.backgroundColor = color;
+            swatch.setAttribute('aria-hidden', 'true');
+
+            const label = document.createElement('span');
+            label.textContent = fund.name;
+            const rate = document.createElement('small');
+            rate.textContent = percent.format(fund.annualFee / fund.amount) + ' MER';
+            label.append(rate);
+
+            const estimate = document.createElement('strong');
+            estimate.textContent = money(fees[years]);
+            item.append(swatch, label, estimate);
+            legend.append(item);
+
+            datasets.push({
+                label: fund.name,
+                data: fees,
+                borderColor: color,
+                backgroundColor: color,
+                pointBackgroundColor: color,
+                pointRadius: years > 25 ? 2 : 3
+            });
+        });
+        const feeLegend = get('fee-legend');
+        feeLegend.replaceChildren(legend);
+        feeLegend.setAttribute('aria-label', 'Estimated fees by holding after ' + yearLabel);
+
         if (!feeChart) return;
-        feeChart.data.labels = fees.map((_, year) => year);
-        feeChart.data.datasets[0].data = selectedHoldings.length ? fees : [];
+        feeChart.data.labels = Array.from({ length: years + 1 }, (_, year) => year);
+        feeChart.data.datasets = datasets;
         feeChart.update('none');
-        get('fee-chart').setAttribute('aria-label', 'Projected cumulative MER fees over ' + yearLabel + ', totaling ' + money(fees[years]));
+        const scopeName = accountSelect.selectedOptions[0].textContent.trim();
+        const chartLabel = selectedIndex === 'all' ? scopeName : datasets[0]?.label ?? scopeName;
+        get('fee-chart').setAttribute('aria-label', 'Projected cumulative MER fees for ' + chartLabel + ' over ' + yearLabel);
+    }
+
+    function holdingColor(index) {
+        // Give portfolios with more than eight holdings extra colours.
+        const hue = Math.round(index * 137.5) % 360;
+        return allocationColors[index] ?? `hsl(${hue} 58% 47%)`;
+    }
+
+    function fillFeeHoldingSelect() {
+        // An account change starts with all holdings in that account.
+        feeHoldingSelect.length = 1;
+        feeHoldingSelect.value = 'all';
+        selectedFunds.forEach((fund, index) => {
+            const option = document.createElement('option');
+            option.value = String(index);
+            option.textContent = fund.name;
+            feeHoldingSelect.append(option);
+        });
+        feeHoldingSelect.disabled = selectedFunds.length === 0;
     }
 
     function renderAccount() {
         const scope = accountSelect.value;
         selectedHoldings = scope === 'all' ? holdings : holdings.filter(({ account }) => account === scope);
         const grouped = aggregateHoldings(selectedHoldings);
+        selectedFunds = grouped;
+        fillFeeHoldingSelect();
         const total = grouped.reduce((sum, { amount }) => sum + amount, 0);
         const empty = grouped.length === 0;
         const visibleName = accountSelect.selectedOptions[0].textContent;
@@ -166,7 +235,7 @@
             const dataset = allocationChart.data.datasets[0];
             allocationChart.data.labels = empty ? [] : grouped.map(({ name }) => name);
             dataset.data = empty ? [1] : grouped.map(({ amount }) => amount);
-            dataset.backgroundColor = empty ? [chartColors().grid] : grouped.map((_, index) => allocationColors[index % allocationColors.length]);
+            dataset.backgroundColor = empty ? [chartColors().grid] : grouped.map((_, index) => holdingColor(index));
             allocationChart.update('none');
         }
         renderProjection();
@@ -188,7 +257,7 @@
             const item = document.createElement('li');
             const swatch = document.createElement('i');
             swatch.className = 'swatch';
-            swatch.style.backgroundColor = allocationColors[index % allocationColors.length];
+            swatch.style.backgroundColor = holdingColor(index);
             const label = document.createElement('span');
             label.textContent = name;
             const weight = document.createElement('strong');
@@ -211,34 +280,21 @@
         const common = { responsive: true, maintainAspectRatio: false, animation: false };
         feeChart = new Chart(get('fee-chart'), {
             type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    data: [],
-                    borderColor: colors.line,
-                    backgroundColor: ({ chart }) => {
-                        const { chartArea, ctx } = chart;
-                        if (!chartArea) return 'transparent';
-                        const fill = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                        fill.addColorStop(0, chartColors()['line-fill']);
-                        fill.addColorStop(1, 'transparent');
-                        return fill;
-                    },
-                    fill: 'origin',
-                    tension: 0.3,
-                    pointBackgroundColor: colors.line,
-                    pointRadius: ({ chart }) => chart.data.labels.length > 26 ? 2 : 3,
-                    pointHoverRadius: 5,
-                    borderWidth: 2
-                }]
-            },
+            data: { labels: [], datasets: [] },
             options: {
                 ...common,
-                interaction: { mode: 'index', intersect: false },
+                interaction: { mode: 'nearest', intersect: false },
+                elements: {
+                    line: { tension: 0.25, borderWidth: 2 },
+                    point: { hoverRadius: 5 }
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        callbacks: { title: ([item]) => 'Year ' + item.label, label: ({ raw }) => money(raw) + ' cumulative' }
+                        callbacks: {
+                            title: ([item]) => 'Year ' + item.label,
+                            label: ({ dataset, raw }) => dataset.label + ': ' + money(raw)
+                        }
                     }
                 },
                 scales: {
@@ -274,6 +330,7 @@
         setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark', true);
     });
     accountSelect.addEventListener('change', renderAccount);
+    feeHoldingSelect.addEventListener('change', renderFeeChart);
     accountCards.forEach((card) => card.addEventListener('click', () => {
         accountSelect.value = accountSelect.value === card.dataset.account ? 'all' : card.dataset.account;
         renderAccount();

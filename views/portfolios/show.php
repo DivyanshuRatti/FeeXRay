@@ -1,79 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($portfolio['name']); ?> | FeeXRay</title>
-</head>
-<body>
+<?php
+$pageTitle = $portfolio['name'];
+require __DIR__ . '/header.php';
+?>
 
-    <aside>
-        <a href="/dashboard.php">FeeXRay</a>
-        <nav>
-            <a href="/dashboard.php">Dashboard</a>
-            <a href="/portfolios.php">Portfolios</a>
-        </nav>
-        <a href="/logout.php">Log out</a>
-    </aside>
+<main id="main" class="portfolio-main">
+    <a class="portfolio-back" href="/portfolios.php">Back to portfolios</a>
+    <div class="portfolio-hero">
+        <span class="portfolio-account"><?= htmlspecialchars($accountLabels[$portfolio['account_type']] ?? $portfolio['account_type']) ?></span>
+        <h1><?= htmlspecialchars($portfolio['name']) ?></h1>
 
-    <main>
-        <p><a href="/portfolios.php">Back to portfolios</a></p>
+        <!-- The detail controller supplies these totals. -->
+        <?php if (!empty($holdings)): ?>
+            <dl class="portfolio-totals">
+                <div><dt>Total invested</dt><dd>$<?= number_format($totalAmount, 2) ?></dd></div>
+                <div><dt>Yearly fees</dt><dd>$<?= number_format($totalFee, 2) ?></dd></div>
+                <div><dt>Average MER</dt><dd><?= number_format($averageMer * 100, 2) ?>%</dd></div>
+            </dl>
+        <?php endif; ?>
+    </div>
 
-        <h1><?php echo htmlspecialchars($portfolio['name']); ?></h1>
-        <p><?php echo htmlspecialchars($portfolio['account_type']); ?></p>
+    <section class="portfolio-panel glass" aria-labelledby="holdings-title">
+        <div class="portfolio-section-heading">
+            <h2 id="holdings-title">Holdings</h2>
+            <a class="button" href="/holding-add.php?portfolio_id=<?= (int) $portfolio['id'] ?>">Add holding</a>
+        </div>
 
+        <?php if (empty($holdings)): ?>
+            <p class="portfolio-empty-holdings">No holdings yet. Add one to see what you pay in fees.</p>
+        <?php else: ?>
+            <div class="portfolio-table-wrap" tabindex="0" role="region" aria-label="Holdings table">
+                <table class="portfolio-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Fund</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">MER</th>
+                            <th scope="col">Yearly fee</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($holdings as $h): ?>
+                            <tr>
+                                <th scope="row">
+                                    <?= htmlspecialchars($h['name']) ?>
+                                    <?php if ($h['is_custom']): ?><small class="portfolio-custom">Custom</small><?php endif; ?>
+                                </th>
+                                <td>$<?= number_format($h['amount'], 2) ?></td>
+                                <td><?= number_format($h['mer'] * 100, 2) ?>%</td>
+                                <td>$<?= number_format($h['yearly_fee'], 2) ?></td>
+                                <td>
+                                    <form method="POST" action="/holding-delete.php" onsubmit="return confirm('Delete this holding?');">
+                                        <?php csrfField(); ?>
+                                        <input type="hidden" name="id" value="<?= (int) $h['id'] ?>">
+                                        <button class="portfolio-delete" type="submit" aria-label="Delete <?= htmlspecialchars($h['name']) ?>">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </section>
+
+    <!-- Keep destructive actions separate from the holdings controls. -->
+    <div class="portfolio-footer">
         <form method="POST" action="/portfolio-delete.php" onsubmit="return confirm('Delete this portfolio and all its holdings?');">
             <?php csrfField(); ?>
-            <input type="hidden" name="id" value="<?php echo $portfolio['id']; ?>">
-            <button type="submit">Delete portfolio</button>
+            <input type="hidden" name="id" value="<?= (int) $portfolio['id'] ?>">
+            <button class="portfolio-delete" type="submit">Delete portfolio</button>
         </form>
-
-        <section>
-            <h2>Holdings</h2>
-            <a href="/holding-add.php?portfolio_id=<?php echo $portfolio['id']; ?>">Add holding</a>
-
-            <?php
-            if (empty($holdings)) {
-                echo '<p>No holdings yet. Add one to see what you pay in fees.</p>';
-            } else {
-                // Summary
-                $total = number_format($totalAmount, 2);
-                $fees = number_format($totalFee, 2);
-                $avg = number_format($averageMer * 100, 2);
-
-                echo "<p>Total invested: $$total</p>";
-                echo "<p>Yearly fees: $$fees</p>";
-                echo "<p>Average MER: $avg%</p>";
-
-                // One row per holding
-                echo '<table>';
-                echo '<tr><th>Fund</th><th>Amount</th><th>MER</th><th>Yearly fee</th><th></th></tr>';
-
-                foreach ($holdings as $h) {
-                    $name = htmlspecialchars($h['name']);
-                    if ($h['is_custom']) {
-                        $name = $name . ' (custom)';
-                    }
-                    $amount = number_format($h['amount'], 2);
-                    $mer = number_format($h['mer'] * 100, 2);
-                    $fee = number_format($h['yearly_fee'], 2);
-
-                    $id = $h['id'];
-                    $token = csrfToken();
-                    $deleteForm = "<form method='POST' action='/holding-delete.php' onsubmit=\"return confirm('Delete this holding?');\">"
-                                . "<input type='hidden' name='csrf_token' value='$token'>"
-                                . "<input type='hidden' name='id' value='$id'>"
-                                . "<button type='submit'>Delete</button>"
-                                . "</form>";
-
-                    echo "<tr><td>$name</td><td>$$amount</td><td>$mer%</td><td>$$fee</td><td>$deleteForm</td></tr>";
-                                    
-                }
-                echo '</table>';
-            }
-            ?>
-        </section>
-    </main>
+    </div>
+</main>
 
 </body>
 </html>

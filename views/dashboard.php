@@ -121,15 +121,21 @@ $percent = $totalInvested > 0 ? number_format(100 * $totalFees / $totalInvested,
                 <div class="panel-heading">
                     <div>
                         <h2 id="trend-title">MER over time</h2>
-                        <p>Projected cumulative fund fees</p>
+                        <p>Projected cumulative fees by holding</p>
                     </div>
-                    <span class="line-key"><i></i> MER paid</span>
+                    <div class="account-control fee-control">
+                        <label for="fee-holding-select">Holding</label>
+                        <select id="fee-holding-select" aria-controls="fee-chart fee-legend" disabled>
+                            <option value="all">All holdings</option>
+                        </select>
+                    </div>
                 </div>
+                <p id="chart-status" class="chart-status" hidden>Charts are unavailable. You can still review the fee estimates.</p>
                 <div class="chart-frame line-frame">
-                    <canvas id="fee-chart" role="img" aria-label="Projected cumulative MER fees by year"></canvas>
+                    <canvas id="fee-chart" role="img" aria-label="Projected cumulative MER fees by holding"></canvas>
                     <p id="fee-empty" class="chart-empty" hidden>Add holdings to see projected fees.</p>
                 </div>
-                <p id="chart-status" class="chart-status" hidden>Charts are unavailable. The holdings and fee estimates are still shown below.</p>
+                <ul id="fee-legend" class="fee-legend" aria-label="Chart key"></ul>
             </section>
 
             <section class="panel glass allocation" aria-labelledby="allocation-title">
@@ -183,19 +189,19 @@ $percent = $totalInvested > 0 ? number_format(100 * $totalFees / $totalInvested,
                 <div class="range-labels" aria-hidden="true"><span>1 year</span><span>50 years</span></div>
                 <p class="assumptions">Assumes a 5% annual return before fees, constant MERs, and no deposits or withdrawals. Each year’s fee is estimated from the opening balance.</p>
             </section>
-        </div>
-        <section class="panel glass savings" aria-labelledby="savings-title">
-            <div class="panel-heading">
-                <div>
-                    <h2 id="savings-title">Lower-cost options</h2>
-                    <p id="savings-period">Estimated fees over 20 years</p>
+            <section class="panel glass savings" aria-labelledby="savings-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="savings-title">Lower-cost options</h2>
+                        <p id="savings-period">Estimated fees over 20 years</p>
+                    </div>
                 </div>
-            </div>
-            <ul id="savings-list" class="savings-list"></ul>
-            <p id="savings-total" class="savings-total"></p>
-            <p id="savings-empty" class="holdings-empty" hidden></p>
-            <p class="assumptions">Compares each fund with the lowest-cost fund in the same category on our list. Funds in the same category can still differ in holdings, risk and strategy. Estimate only, not financial advice.</p>
-        </section>
+                <ul id="savings-list" class="savings-list"></ul>
+                <p id="savings-total" class="savings-total"></p>
+                <p id="savings-empty" class="holdings-empty" hidden></p>
+                <p class="assumptions">Compares each fund with the lowest-cost fund in the same category on our list. Funds in the same category can still differ in holdings, risk and strategy. Estimate only, not financial advice.</p>
+            </section>
+        </div>
         <noscript><p class="glass noscript">Enable JavaScript to view charts, holdings, and projections.</p></noscript>
     </main>
 

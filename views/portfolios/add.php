@@ -1,45 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add portfolio | FeeXRay</title>
-</head>
-<body>
+<?php
+$pageTitle = 'Add a portfolio';
+require __DIR__ . '/header.php';
+?>
 
-    <main>
+<main id="main" class="portfolio-main portfolio-main-narrow">
+    <a class="portfolio-back" href="/portfolios.php">Back to portfolios</a>
+    <div class="portfolio-heading">
         <h1>Add a portfolio</h1>
+        <p>Give your portfolio a name and choose its account type.</p>
+    </div>
 
-        <?php
-        if (!empty($errors)) {
-            echo '<ul>';
-            foreach ($errors as $error) {
-                echo '<li>' . htmlspecialchars($error) . '</li>';
-            }
-            echo '</ul>';
-        }
-        ?>
+    <section class="portfolio-panel glass" aria-label="New portfolio details">
+        <?php if (!empty($errors)): ?>
+            <ul class="portfolio-errors" role="alert">
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
-        <form method="POST" action="/portfolio-add.php">
+        <form class="portfolio-form" method="POST" action="/portfolio-add.php">
             <?php csrfField(); ?>
-            <label for="name">Portfolio name</label>
-            <input type="text" id="name" name="name" placeholder="My TFSA" value="<?php echo htmlspecialchars($name); ?>" required>
+            <label for="name">
+                Portfolio name
+                <input type="text" id="name" name="name" placeholder="My TFSA" value="<?= htmlspecialchars($name) ?>" required>
+            </label>
 
-            <label for="account_type">Account type</label>
-            <select id="account_type" name="account_type" required>
-                <option value="">Choose one</option>
-                <option value="TFSA">TFSA</option>
-                <option value="RRSP">RRSP</option>
-                <option value="RESP">RESP</option>
-                <option value="PENSION">Pension</option>
-                <option value="NON_REG">Non-registered</option>
-            </select>
+            <label for="account_type">
+                Account type
+                <select id="account_type" name="account_type" required>
+                    <option value="">Choose one</option>
+                    <option value="TFSA" <?= ($accountType ?? '') === 'TFSA' ? 'selected' : '' ?>>TFSA</option>
+                    <option value="RRSP" <?= ($accountType ?? '') === 'RRSP' ? 'selected' : '' ?>>RRSP</option>
+                    <option value="RESP" <?= ($accountType ?? '') === 'RESP' ? 'selected' : '' ?>>RESP</option>
+                    <option value="PENSION" <?= ($accountType ?? '') === 'PENSION' ? 'selected' : '' ?>>Pension</option>
+                    <option value="NON_REG" <?= ($accountType ?? '') === 'NON_REG' ? 'selected' : '' ?>>Non-registered</option>
+                </select>
+            </label>
 
-            <button type="submit">Save</button>
+            <div class="portfolio-form-actions">
+                <button class="button" type="submit">Save portfolio</button>
+                <a class="portfolio-link" href="/portfolios.php">Cancel</a>
+            </div>
         </form>
-
-        <p><a href="/dashboard.php">Back to dashboard</a></p>
-    </main>
+    </section>
+</main>
 
 </body>
 </html>
