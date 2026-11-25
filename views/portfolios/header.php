@@ -26,7 +26,7 @@ $accountLabels = ['PENSION' => 'Pension', 'NON_REG' => 'Non-registered'];
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <!-- Shared navigation for the three portfolio pages. -->
+    <!-- Shared navigation for the portfolio and holding pages. -->
     <header class="portfolio-header glass">
         <a class="brand" href="/dashboard.php">
             <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>

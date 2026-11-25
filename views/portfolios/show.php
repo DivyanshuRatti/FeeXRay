@@ -5,6 +5,13 @@ require __DIR__ . '/header.php';
 
 <main id="main" class="portfolio-main">
     <a class="portfolio-back" href="/portfolios.php">Back to portfolios</a>
+    <?php if (!empty($holdings)): ?>
+        <p id="holding-success" class="holding-success glass" role="status" data-portfolio-id="<?= (int) $portfolio['id'] ?>" hidden>
+            <span aria-hidden="true">✓</span>
+            <span>Holding added to <strong><?= htmlspecialchars($portfolio['name']) ?></strong>
+                (<?= htmlspecialchars($accountLabels[$portfolio['account_type']] ?? $portfolio['account_type']) ?>).</span>
+        </p>
+    <?php endif; ?>
     <div class="portfolio-hero">
         <span class="portfolio-account"><?= htmlspecialchars($accountLabels[$portfolio['account_type']] ?? $portfolio['account_type']) ?></span>
         <h1><?= htmlspecialchars($portfolio['name']) ?></h1>
@@ -74,5 +81,6 @@ require __DIR__ . '/header.php';
     </div>
 </main>
 
+<script src="assets/js/holdings.js" defer></script>
 </body>
 </html>
